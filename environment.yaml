@@ -1,15 +1,6 @@
-name: pytorch12
+name: dovenet
 channels:
-  - https://mirrors.ustc.edu.cn/anaconda/cloud/bioconda
-  - pytorch
-  - https://mirrors.ustc.edu.cn/anaconda/pkgs/main
-  - https://mirrors.ustc.edu.cn/anaconda/cloud/conda-forge
-  - https://mirrors.ustc.edu.cn/anaconda/cloud/menpo/
-  - https://mirrors.ustc.edu.cn/anaconda/cloud/bioconda/
-  - https://mirrors.ustc.edu.cn/anaconda/cloud/msys2/
-  - https://mirrors.ustc.edu.cn/anaconda/cloud/conda-forge/
-  - https://mirrors.ustc.edu.cn/anaconda/pkgs/free/
-  - https://mirrors.ustc.edu.cn/anaconda/pkgs/main/
+  - conda-forge
   - defaults
 dependencies:
   - dominate=2.1.16=py36_0
@@ -70,5 +61,3 @@ dependencies:
   - libstdcxx-ng=9.1.0=hdf63c60_0
   - mkl=2019.4=243
   - cpuonly=1.0=0
-prefix: /home/user/anaconda3/envs/pytorch12
-

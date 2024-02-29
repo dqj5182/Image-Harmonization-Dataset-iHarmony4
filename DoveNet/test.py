@@ -12,8 +12,8 @@ from util.visualizer import save_images
 from util import html,util
 
 from skimage import data, img_as_float
-from skimage.measure import compare_mse as mse
-from skimage.measure import compare_psnr as psnr
+from skimage.metrics import mean_squared_error as mse
+from skimage.metrics import peak_signal_noise_ratio as psnr
 
 if __name__ == '__main__':
     opt = TestOptions().parse()  # get test options
@@ -32,10 +32,12 @@ if __name__ == '__main__':
     webpage = html.HTML(web_dir, 'Experiment = %s, Phase = %s, Epoch = %s' % (opt.name, opt.phase, opt.epoch))
     if opt.eval:
         model.eval()
+
+    mse_score_all, psnr_score_all = [], []
     for i, data in enumerate(dataset):
         if i >= opt.num_test:  # only apply our model to opt.num_test images.
             break
-        model.set_input(data)  # unpack data from data loader
+        model.set_input(data)  # unpack data from data loader]
         model.test()           # run inference
         visuals = model.get_current_visuals()  # get image results
         img_path = str(data['img_path'])
@@ -57,6 +59,10 @@ if __name__ == '__main__':
                 comp=np.array(comp, dtype=np.float32)
         mse_score_op = mse(output,real)
         psnr_score_op = psnr(real,output,data_range=output.max() - output.min())
+        mse_score_all.append(mse_score_op)
+        psnr_score_all.append(psnr_score_op)
         print('%s | mse %0.2f | psnr %0.2f' % (image_name,mse_score_op,psnr_score_op))
+
+    print('%s | all mse %0.2f | all psnr %0.2f' % (image_name,np.array(mse_score_all).mean(),np.array(psnr_score_all).mean()))
 
     webpage.save()  # save the HTML

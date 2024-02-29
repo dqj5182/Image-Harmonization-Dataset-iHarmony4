@@ -40,13 +40,17 @@ class Iharmony4Dataset(BaseDataset):
         self.isTrain = opt.isTrain
         if opt.isTrain==True:
             print('loading training file: ')
-            self.trainfile = opt.dataset_root+'IHD_train.txt'
+            self.trainfile = os.path.join(opt.dataset_root.split('/')[0], opt.dataset_root.split('/')[1], opt.dataset_root.split('/')[2], opt.dataset_root.split('/')[2]+'_train.txt')
+            # self.trainfile = opt.dataset_root+'_train.txt'
+            # self.trainfile = opt.dataset_root+'IHD_train.txt'
             with open(self.trainfile,'r') as f:
                     for line in f.readlines():
                         self.image_paths.append(os.path.join(opt.dataset_root,line.rstrip()))
         elif opt.isTrain==False:
             print('loading test file')
-            self.trainfile = opt.dataset_root+'IHD_test.txt'
+            self.trainfile = os.path.join(opt.dataset_root.split('/')[0], opt.dataset_root.split('/')[1], opt.dataset_root.split('/')[2], opt.dataset_root.split('/')[2]+'_test.txt')
+            # self.trainfile = opt.dataset_root+'_test.txt'
+            # self.trainfile = opt.dataset_root+'IHD_test.txt'
             with open(self.trainfile,'r') as f:
                     for line in f.readlines():
                         self.image_paths.append(os.path.join(opt.dataset_root,line.rstrip()))
@@ -67,10 +71,11 @@ class Iharmony4Dataset(BaseDataset):
         Step 4: return a data point as a dictionary.
         """
         path = self.image_paths[index]
+        path = os.path.join(path.split('/')[0], path.split('/')[1], path.split('/')[2], 'composite_images', path.split('/')[3])
         name_parts=path.split('_')
-        mask_path = self.image_paths[index].replace('composite_images','masks')
+        mask_path = path.replace('composite_images','masks')
         mask_path = mask_path.replace(('_'+name_parts[-1]),'.png')
-        target_path = self.image_paths[index].replace('composite_images','real_images')
+        target_path = path.replace('composite_images','real_images')
         target_path = target_path.replace(('_'+name_parts[-2]+'_'+name_parts[-1]),'.jpg')
 
         comp = Image.open(path).convert('RGB')
